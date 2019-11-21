@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>Indigo</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Input\**" />
+    <Compile Remove="Utility\**" />
+    <EmbeddedResource Remove="Input\**" />
+    <EmbeddedResource Remove="Utility\**" />
+    <None Remove="Input\**" />
+    <None Remove="Utility\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Alexandria\Alexandria.csproj" />
+    <ProjectReference Include="..\FNT\FNT.csproj" />
+    <ProjectReference Include="..\Glide\Glide.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="FNA">
+      <HintPath>..\lib\FNA.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
