@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Alexandria\Alexandria.csproj" />
+    <ProjectReference Include="..\Alexandria\Alexandria\Alexandria.csproj" />
     <ProjectReference Include="..\FNT\FNT.csproj" />
     <ProjectReference Include="..\Glide\Glide.csproj" />
   </ItemGroup>

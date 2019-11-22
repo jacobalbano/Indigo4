@@ -1,0 +1,9 @@
+[submodule "Glide"]
+	path = Glide
+	url = https://github.com/jacobalbano/glide.git
+[submodule "Alexandria"]
+	path = Alexandria
+	url = https://github.com/jacobalbano/alexandria.git
+[submodule "FNT"]
+	path = FNT
+	url = https://github.com/jacobalbano/fnt.git
