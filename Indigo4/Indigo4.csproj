@@ -7,11 +7,18 @@
 
   <ItemGroup>
     <Compile Remove="Input\**" />
-    <Compile Remove="Utility\**" />
     <EmbeddedResource Remove="Input\**" />
-    <EmbeddedResource Remove="Utility\**" />
     <None Remove="Input\**" />
-    <None Remove="Utility\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Utility\AutoTileSet.cs" />
+    <Compile Remove="Utility\BitwiseTileset.cs" />
+    <Compile Remove="Utility\OgmoLoader.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
 
   <ItemGroup>
