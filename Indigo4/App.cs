@@ -1,9 +1,9 @@
 ﻿using Alexandria;
 using Glide;
 using Indigo.Configuration;
+using Indigo.Configuration.Modules;
 using Indigo.Engine;
 using Indigo.Engine.Implementation;
-using Indigo.Modules;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -99,7 +99,6 @@ namespace Indigo
         }
 
         private readonly Config config;
-        private static Space nextSpace;
         private static SubSystems SS;
 
     }

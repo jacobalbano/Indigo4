@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Indigo.Modules
+namespace Indigo.Configuration.Modules
 {
     internal class DefaultModule : IModule
     {

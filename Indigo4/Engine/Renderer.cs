@@ -1,8 +1,8 @@
 ﻿using Indigo.Configuration;
+using Indigo.Configuration.Modules;
 using Indigo.Core;
 using Indigo.Engine.Implementation;
 using Indigo.Engine.Rendering;
-using Indigo.Modules;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;

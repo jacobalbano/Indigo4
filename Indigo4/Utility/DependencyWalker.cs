@@ -157,7 +157,7 @@ namespace Indigo.Utility
             return nodes;
         }
 
-        private List<DependencyNode> Graph;
+        private readonly List<DependencyNode> Graph;
 
         private class DependencyNode
         {

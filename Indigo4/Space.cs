@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Indigo.Core.Collections;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -14,14 +15,14 @@ namespace Indigo
         {
         }
 
-        public Layer GetLayer(string name)
+        public IEntityLayer GetLayer(string name)
         {
-            return new Layer(this, name); //TODO cache
+            return new EntityLayer(this, name); //TODO cache
         }
 
         public CollisionGroup GetCollisionGroup(string name)
         {
-            return new CollisionGroup(this, name);// TODO cache
+            return new CollisionGroup(this, name); // TODO cache
         }
 
         public virtual void Render()
@@ -31,6 +32,18 @@ namespace Indigo
         public virtual void Update()
         {
             throw new NotImplementedException();
+        }
+
+        public interface ICollisionGroup { string Name { get; } }
+
+        public interface IEntityLayer
+        {
+            string Name { get; }
+
+            float ScrollX { get; set; }
+            float ScrollY { get; set; }
+
+            int Depth { get; set; }
         }
     }
 }

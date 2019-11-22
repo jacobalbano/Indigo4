@@ -1,8 +1,8 @@
 ﻿using Indigo.Configuration;
+using Indigo.Configuration.Modules;
 using Indigo.Core;
 using Indigo.Engine.Implementation;
 using Indigo.Engine.Rendering;
-using Indigo.Modules;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -64,6 +64,7 @@ namespace Indigo.Engine
 
         internal Window(App.Config appConfig, XnaGame xnaGame)
         {
+            XnaGame = xnaGame;
             AllowResize = appConfig.WindowConfig.AllowResize;
             ShowCursor = appConfig.WindowConfig.ShowCursor;
             xnaGame.Window.ClientSizeChanged += Window_ClientSizeChanged;

@@ -29,7 +29,7 @@ namespace Indigo.Utility
 		{
 			var result = _seed;
 			_seed = Guid.NewGuid().GetHashCode();
-			return _seed;
+			return result;
 		}
 		
 		public int Seed
@@ -119,7 +119,7 @@ namespace Indigo.Utility
 		public float Float()
 		{
 			//	what is this though
-			return ((_seed = (int) ((_seed * 48271.0) % 2147483647.0)) & 0x3FFFFFFF) / 1073741823f;
+			return ((_seed = (int) (_seed * 48271.0 % 2147483647.0)) & 0x3FFFFFFF) / 1073741823f;
 		}
 		
 		/// <summary>
@@ -151,7 +151,7 @@ namespace Indigo.Utility
         /// </summary>
         public void Shuffle<T>(IList<T> list)
 		{
-			int j = 0, i = list.Count;
+			int j, i = list.Count;
 			
 			while (--i > 0)
 			{

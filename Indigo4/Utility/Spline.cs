@@ -7,18 +7,14 @@ namespace Indigo.Utility
 {
 	public class Spline : IEnumerable<float>
 	{
-		/// <summary>
-		/// Constructor.
-		/// </summary>
+		/// <summary>Constructor.</summary>
 		/// <param name="points">The points that comprise the spline.</param>
 		public Spline(IEnumerable<float> points)
 		{
 			path = new List<float>(points);
 		}
 		
-		/// <summary>
-		/// Constructor.
-		/// </summary>
+		/// <summary>Constructor.</summary>
 		/// <param name="points">The points that comprise the spline.</param>
 		public Spline(params float[] points)
 		{
@@ -38,10 +34,10 @@ namespace Indigo.Utility
 			int c = b + 1;
 			int d = c + 1;
 			
-			a = (int) MathUtility.Clamp(a, 0, path.Count - 1);
-			b = (int) MathUtility.Clamp(b, 0, path.Count - 1);
-			c = (int) MathUtility.Clamp(c, 0, path.Count - 1);
-			d = (int) MathUtility.Clamp(d, 0, path.Count - 1);
+			a = MathUtility.Clamp(a, 0, path.Count - 1);
+			b = MathUtility.Clamp(b, 0, path.Count - 1);
+			c = MathUtility.Clamp(c, 0, path.Count - 1);
+			d = MathUtility.Clamp(d, 0, path.Count - 1);
 			
 			float scale = 1f / (path.Count - 1);
 			t = (t - b * scale) / scale;
@@ -78,7 +74,7 @@ namespace Indigo.Utility
 			return (float) (0.5 * (((2.0 * b + (c - a) * t) + ((2.0 * a - 5.0 * b + 4.0 * c - d) * t2) + (3.0 * b - a - 3.0 * c + d) * t3) ));
         }
 		
-		private List<float> path;
+		private readonly List<float> path;
 		
 		public IEnumerator<float> GetEnumerator()
 		{
