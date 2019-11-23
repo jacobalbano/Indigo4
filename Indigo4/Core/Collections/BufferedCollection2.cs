@@ -38,7 +38,7 @@ namespace Indigo.Core.Collections
 
             if (skip.Any())
             {
-                var orderedIndexes = skip.OrderByDescending(x => x).ToList();
+                var orderedIndexes = skip.OrderBy(x => x).ToList();
                 skip.Clear();
 
                 for (int i = orderedIndexes.Count; i-- > 0;)
@@ -80,8 +80,7 @@ namespace Indigo.Core.Collections
 
         public IEnumerator<T> GetEnumerator()
         {
-            int i = head;
-            while (i -->  0)
+            for (int i = 0; i < head; i++)
             {
                 if (!skip.Contains(i))
                     yield return items[i];

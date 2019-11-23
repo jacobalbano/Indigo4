@@ -17,6 +17,7 @@ namespace Indigo
 
         public static Window Window => SS.Window;
         public static Renderer Renderer => SS.Renderer;
+        public static GameTime GameTime => SS.GameTime;
 
         public static Library Library => SS.Library;
 

@@ -12,6 +12,7 @@ namespace Indigo.Engine.Implementation
         public Window Window { get; internal set; }
         public Renderer Renderer { get; internal set; }
         public Tweener Tweener { get; internal set; }
+        public GameTime GameTime { get; internal set; }
 
         #region IDisposable Support
         private bool disposedValue = false; // To detect redundant calls

@@ -7,6 +7,13 @@ namespace Indigo
 {
     public partial class Space
     {
+        public EntityList Entities { get; }
+
+        public Space()
+        {
+            Entities = new EntityList(this);
+        }
+
         public virtual void Begin()
         {
         }
@@ -20,18 +27,20 @@ namespace Indigo
             return new EntityLayer(this, name); //TODO cache
         }
 
-        public CollisionGroup GetCollisionGroup(string name)
+        public ICollisionGroup GetCollisionGroup(string name)
         {
             return new CollisionGroup(this, name); // TODO cache
         }
 
         public virtual void Render()
         {
+            //foreach (var e in Entities)
+            //    e.Render();
         }
 
         public virtual void Update()
         {
-            throw new NotImplementedException();
+            Entities.Update();
         }
 
         public interface ICollisionGroup { string Name { get; } }

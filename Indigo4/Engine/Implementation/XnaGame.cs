@@ -1,6 +1,7 @@
 ﻿using Alexandria;
 using Indigo.Content.Loaders;
 using Microsoft.Xna.Framework;
+using XNA = Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -59,17 +60,19 @@ namespace Indigo.Engine.Implementation
             ss.Window = new Window(AppConfig, this);
             ss.Library = new Library();
             ss.Renderer = Renderer;
+            ss.GameTime = new GameTime();
         }
 
-        protected override void Update(GameTime gameTime)
+        protected override void Update(XNA.GameTime gameTime)
         {
             base.Update(gameTime);
             App.Update();
         }
 
-        protected override void Draw(GameTime gameTime)
+        protected override void Draw(XNA.GameTime gameTime)
         {
             base.Draw(gameTime);
+            App.GameTime.TotalTime = (float) gameTime.TotalGameTime.TotalSeconds;
 
             var target = Renderer.Target;
             var sb = Renderer.RenderContext.SpriteBatch;
