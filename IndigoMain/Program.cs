@@ -1,4 +1,6 @@
-﻿using Indigo;
+﻿using Alexandria.FileStores;
+using Indigo;
+using Indigo.Configuration.Modules.Alexandria;
 using Indigo.Core;
 using Indigo.Core.Collections;
 using Microsoft.Xna.Framework;
@@ -16,6 +18,7 @@ namespace IndigoMain
         {
             var config = new App.Config
             {
+                LibraryConfig = { FileStores = { new RootDirectoryFileStoreConfig { RootDirectoryPath = "../../Assets" } } },
                 RendererConfig = { ClearColor = Color.Indigo },
                 WindowConfig =
                 {
@@ -23,8 +26,7 @@ namespace IndigoMain
                 }
             };
 
-            var app = new App(config);
-            App.NextSpace = new TestSpace();
+            var app = new App(config, new TestSpace());
             app.Run();
         }
     }

@@ -16,7 +16,7 @@ namespace Indigo.Components
 		{
 			Action = action;
 			if (Action == null)
-				throw new ArgumentNullException("action");
+				throw new ArgumentNullException(nameof(action));
 		}
 		
 		public override void Update()

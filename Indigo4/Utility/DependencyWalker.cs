@@ -63,7 +63,7 @@ namespace Indigo.Utility
         public void Walk(Func<T, T[], bool> processNode)
         {
             if (processNode == null)
-                throw new ArgumentNullException("processNode");
+                throw new ArgumentNullException(nameof(processNode));
 
             var root = new DependencyNode();
             root.Dependencies.AddRange(Graph);

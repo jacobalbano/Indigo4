@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Indigo.Engine;
+using Indigo.Engine.Rendering;
 
 namespace Indigo.Core.Collections
 {
@@ -31,12 +33,12 @@ namespace Indigo.Core.Collections
                 var c = delta.Item;
                 switch (delta.Operation)
                 {
-                    case BufferedCollection2<Component>.DeltaOperation.Add:
+                    case BufferedCollection<Component>.DeltaOperation.Add:
                         Contract.ValidateCanAdd(c, Owner);
                         c.Entity = Owner;
                         c.AddedToEntity();
                         break;
-                    case BufferedCollection2<Component>.DeltaOperation.Remove:
+                    case BufferedCollection<Component>.DeltaOperation.Remove:
                         Contract.ValidateCanRemove(c, Owner);
                         c.RemovedFromEntity();
                         c.Entity = null;
@@ -48,7 +50,13 @@ namespace Indigo.Core.Collections
                 c.Update();
         }
 
-        private BufferedCollection2<Component> components = new BufferedCollection2<Component>();
+        internal void Render(RenderContext ctx)
+        {
+            foreach (var c in components)
+                c.Render(ctx);
+        }
+
+        private BufferedCollection<Component> components = new BufferedCollection<Component>();
 
         internal Entity Owner { get; }
 

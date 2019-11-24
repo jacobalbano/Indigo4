@@ -97,7 +97,7 @@ namespace Indigo.Utility
 
             private static Func<TResult> GenerateFactory()
             {
-                if (typeof(TResult).IsValueType)return () => default(TResult);
+                if (typeof(TResult).IsValueType) return () => default;
                 return Expression.Lambda<Func<TResult>>(Expression.New(typeof(TResult).GetConstructor(Type.EmptyTypes))).Compile();
             }
         }

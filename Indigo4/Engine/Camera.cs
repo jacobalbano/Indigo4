@@ -15,19 +15,10 @@ namespace Indigo.Engine
 
         internal Camera()
         {
-            dirty = true;
             Zoom = 1;
         }
 
         public Matrix GetTransform(float scrollX = 1, float scrollY = 1)
-        {
-            EnsureCurrentTransform();
-
-            return Matrix.CreateTranslation(X * scrollX, Y * scrollY, 0)
-                * matrix;
-        }
-
-        private void EnsureCurrentTransform()
         {
             if (dirty)
             {
@@ -37,17 +28,18 @@ namespace Indigo.Engine
                     * Matrix.CreateRotationZ(MathHelper.ToRadians(Angle))
                     * Matrix.CreateTranslation(new Vector3(OriginX, OriginY, 0));
             }
+
+            return Matrix.CreateTranslation(X * scrollX, Y * scrollY, 0) * matrix;
         }
 
         private void Set(ref float storage, float value)
         {
-            if (storage == value) return;
-            dirty = true;
+            if (value != storage) dirty = true;
             storage = value;
         }
 
         private float x, y, originX, originY, zoom, angle;
-        private bool dirty;
+        private bool dirty = true;
         private Matrix matrix;
     }
 }

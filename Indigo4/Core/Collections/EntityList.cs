@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using Indigo.Engine;
+using Indigo.Engine.Rendering;
 
 namespace Indigo.Core.Collections
 {
@@ -31,12 +34,12 @@ namespace Indigo.Core.Collections
                 var e = delta.Item;
                 switch (delta.Operation)
                 {
-                    case BufferedCollection2<Entity>.DeltaOperation.Add:
+                    case BufferedCollection<Entity>.DeltaOperation.Add:
                         Contract.ValidateCanAdd(e, Space);
                         e.Space = Space;
                         e.AddedToSpace();
                         break;
-                    case BufferedCollection2<Entity>.DeltaOperation.Remove:
+                    case BufferedCollection<Entity>.DeltaOperation.Remove:
                         Contract.ValidateCanRemove(e, Space);
                         e.RemovedFromSpace();
                         e.Space = null;
@@ -48,7 +51,8 @@ namespace Indigo.Core.Collections
                 e.Update();
         }
 
-        private BufferedCollection2<Entity> entities = new BufferedCollection2<Entity>();
+        private BufferedCollection<Entity> entities = new BufferedCollection<Entity>();
+        internal IEnumerable<Entity> AsEnumerable() => entities;
 
         internal Space Space { get; }
 

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Indigo.Engine;
+using Indigo.Engine.Rendering;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -14,6 +16,7 @@ namespace Indigo
         public virtual void AddedToSpace() { }
 
         public virtual void Update() { }
+        public virtual void Render(RenderContext ctx) { }
 
         public virtual void RemovedFromEntity() { }
         public virtual void RemovedFromSpace() { }

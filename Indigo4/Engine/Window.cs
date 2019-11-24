@@ -1,5 +1,5 @@
 ﻿using Indigo.Configuration;
-using Indigo.Configuration.Modules;
+using Indigo.Configuration.Modules.Default;
 using Indigo.Core;
 using Indigo.Engine.Implementation;
 using Indigo.Engine.Rendering;
@@ -10,7 +10,7 @@ using System.Text;
 
 namespace Indigo.Engine
 {
-    public class Window : IConfigurableObject
+    public class Window
     {
         public Size Size
         {
@@ -67,6 +67,7 @@ namespace Indigo.Engine
             XnaGame = xnaGame;
             AllowResize = appConfig.WindowConfig.AllowResize;
             ShowCursor = appConfig.WindowConfig.ShowCursor;
+            size = appConfig.WindowConfig.WindowSize;
             xnaGame.Window.ClientSizeChanged += Window_ClientSizeChanged;
         }
 

@@ -59,7 +59,7 @@ namespace Indigo.Components
 		public Spliner Spline<TTarget, TPoint>(TTarget target, float duration, params TPoint[] points) where TTarget : class
 		{
 			if (target == null)
-				throw new ArgumentNullException("target");
+				throw new ArgumentNullException(nameof(target));
 			
 			var targetType = target.GetType();
 			if (targetType.IsValueType)
@@ -69,11 +69,10 @@ namespace Indigo.Components
 			Duration = duration;
 			
 			var path = new List<float[]>();		//	float[] here is one object's properties
-			var cross = new List<float[]>();	//	float[] here is one property's value at each point
-			
-			FastAccessor<float>[] pointDef;
-			GetDefinitions(target, points[0], out accessor, out pointDef);
-			buffer = new float[accessor.Length];
+			var cross = new List<float[]>();    //	float[] here is one property's value at each point
+
+            GetDefinitions(target, points[0], out accessor, out var pointDef);
+            buffer = new float[accessor.Length];
 			
 			for (int i = 0; i < points.Length; i++)
 			{

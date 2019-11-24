@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Diagnostics;
 
 namespace Indigo.Engine.Implementation
 {
@@ -43,7 +44,6 @@ namespace Indigo.Engine.Implementation
 
             var size = AppConfig.RendererConfig.InternalResolution ?? AppConfig.WindowConfig.WindowSize;
             Renderer.Target = new RenderTarget2D(GraphicsDevice, (int) size.Width, (int) size.Height);
-            Renderer.RenderContext.Pixel.SetData(new[] { Color.White });
 
             App.Library.AddLoader(new TextureLoader(GraphicsDevice));
             App.Library.AddLoader(new FontLoader(GraphicsDevice));
@@ -52,13 +52,13 @@ namespace Indigo.Engine.Implementation
         protected override void LoadContent()
         {
             base.LoadContent();
-            Renderer.RenderContext.SpriteBatch = new SpriteBatch(GraphicsDevice);
+            spriteBatch = new SpriteBatch(GraphicsDevice);
         }
 
         internal void InitializeSubsystems(SubSystems ss)
         {
             ss.Window = new Window(AppConfig, this);
-            ss.Library = new Library();
+            ss.Library = AppConfig.LibraryConfig.InstantiateObject();
             ss.Renderer = Renderer;
             ss.GameTime = new GameTime();
         }
@@ -66,16 +66,19 @@ namespace Indigo.Engine.Implementation
         protected override void Update(XNA.GameTime gameTime)
         {
             base.Update(gameTime);
+            var sw = Stopwatch.StartNew();
             App.Update();
+            Console.Write("Update: {0}ms   ", sw.ElapsedMilliseconds);
         }
 
         protected override void Draw(XNA.GameTime gameTime)
         {
             base.Draw(gameTime);
+            var sw = Stopwatch.StartNew();
+
             App.GameTime.TotalTime = (float) gameTime.TotalGameTime.TotalSeconds;
 
             var target = Renderer.Target;
-            var sb = Renderer.RenderContext.SpriteBatch;
 
             //  Draw entities to the buffer
             {
@@ -97,10 +100,12 @@ namespace Indigo.Engine.Implementation
                     GraphicsDevice.Viewport.Height
                 );
 
-                sb.Begin(SpriteSortMode.Immediate, null, null, null, null, null, res);
-                sb.Draw(target, new Vector2(0, 0), Color.White);
-                sb.End();
+                spriteBatch.Begin(SpriteSortMode.Immediate, null, null, null, null, null, res);
+                spriteBatch.Draw(target, new Vector2(0, 0), Color.White);
+                spriteBatch.End();
             }
+
+            Console.WriteLine("Render: {0}ms", sw.ElapsedMilliseconds);
         }
 
         protected override void BeginRun()
@@ -115,6 +120,7 @@ namespace Indigo.Engine.Implementation
 
         #endregion
 
+        private SpriteBatch spriteBatch;
         private static Matrix GetVirtualRes(float targetWidth, float targetHeight, float currentWidth, float currentHeight)
         {
             float windowRatio = currentWidth / currentHeight;

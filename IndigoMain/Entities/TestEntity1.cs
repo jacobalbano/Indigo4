@@ -1,5 +1,8 @@
 ﻿using Indigo;
 using Indigo.Components;
+using Indigo.Components.Graphics;
+using Indigo.Content;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,31 +13,21 @@ namespace IndigoMain.Entities
 {
     public class TestEntity1 : Entity
     {
-        private int counter = 10;
-        private Actor actor;
-
         public TestEntity1()
         {
-            actor = Components.Add(new Actor(() => Console.WriteLine("Actor updating!")));
-        }
-        
-        public override void Update()
-        {
-            base.Update();
-            Console.WriteLine("TestEntity1 updating!");
-            
-            if (--counter < 0)
+            var img = Components.Add(new Image(App.Library.Load<Texture>(@"PQ2_Chie_Satonaka.png")));
+            img.CenterOrigin();
+
+            var scaleWave = Components.Add(new Wave(3, 0.75f, 1.25f));
+            Components.Add(new Actor(() => img.Scale = scaleWave.Value));
+            Components.Add(new Actor(() => img.Angle++));
+
+            var positionWave = Components.Add(new Wave(4, 0.1f, 0.5f));
+            Components.Add(new Actor(() =>
             {
-                if (actor.Entity != null)
-                {
-                    Components.Remove(actor);
-                    counter = 10;
-                }
-                else
-                {
-                    Space.Entities.Remove(this);
-                }
-            }
+                img.X = (float) App.Window.Size.Width * positionWave.Value;
+                img.Y = (float) App.Window.Size.Height * positionWave.Value;
+            }));
         }
     }
 }

@@ -15,6 +15,17 @@ public static class DictionaryExtensions
         return result;
     }
 
+    public static TValue GetOrAdd<TKey, TValue>(this Dictionary<TKey, TValue> dict, TKey key, Func<TValue> valueFactory)
+    {
+        if (valueFactory == null)
+            throw new ArgumentNullException(nameof(valueFactory));
+
+        if (!dict.TryGetValue(key, out var value))
+            dict[key] = value = valueFactory();
+
+        return value;
+    }
+
     public static TValue GetOrInsertNew<TKey, TValue>(this Dictionary<TKey, TValue> dict, TKey key)
         where TValue : new()
     {

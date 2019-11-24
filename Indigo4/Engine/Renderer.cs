@@ -1,5 +1,5 @@
 ﻿using Indigo.Configuration;
-using Indigo.Configuration.Modules;
+using Indigo.Configuration.Modules.Default;
 using Indigo.Core;
 using Indigo.Engine.Implementation;
 using Indigo.Engine.Rendering;
@@ -11,7 +11,7 @@ using System.Text;
 
 namespace Indigo.Engine
 {
-    public class Renderer : IConfigurableObject
+    public class Renderer
     {
         public Size InternalResolution
         {
@@ -42,9 +42,6 @@ namespace Indigo.Engine
 
         public Color ClearColor { get; set; }
 
-        internal RenderContext RenderContext { get; }
-        internal RenderTarget2D Target { get; set; }
-
         [Module(typeof(DefaultModule))]
         public class Config : ConfigBase<Renderer>
         {
@@ -67,10 +64,36 @@ namespace Indigo.Engine
             //  initial values for vsync and resolution are set in XnaGame
             ClearColor = config.ClearColor;
 
-            RenderContext = new RenderContext()
-            {
-                Pixel = new Texture2D(gameImpl.GraphicsDevice, 1, 1)
-            };
+            spriteBatch = new SpriteBatch(graphicsDevice);
+            pixel = new Texture2D(gameImpl.GraphicsDevice, 1, 1);
+            pixel.SetData(new[] { Color.White });
+
+            renderContext = new RenderContext() { Pixel = pixel };
+        }
+
+        internal RenderContext PrepareContext(Camera camera, EntityLayer layer)
+        {
+            return PrepareContext(camera, layer.ScrollX, layer.ScrollY);
+        }
+
+        internal RenderContext PrepareContext(Camera camera)
+        {
+            return PrepareContext(camera, 1, 1);
+        }
+
+        private RenderContext PrepareContext(Camera camera, float scrollX, float scrollY)
+        {
+            renderContext.SpriteBatch = spriteBatch;
+            renderContext.ViewportWidth = InternalResolution.Width;
+            renderContext.ViewportHeight = InternalResolution.Height;
+
+            renderContext.CameraTransform = camera.GetTransform(scrollX, scrollY);
+            return renderContext;
+        }
+
+        internal void RenderSpace(Space space)
+        {
+            space.Render(this);
         }
 
         public void Clear()
@@ -80,7 +103,12 @@ namespace Indigo.Engine
 
         private GraphicsDevice graphicsDevice;
         private GraphicsDeviceManager graphicsDeviceManager;
+        internal RenderTarget2D Target { get; set; }
         private Size size;
         private bool vsync;
+
+        private readonly Texture2D pixel;
+        private readonly RenderContext renderContext;
+        private readonly SpriteBatch spriteBatch;
     }
 }

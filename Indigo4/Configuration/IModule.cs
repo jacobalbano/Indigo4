@@ -5,7 +5,7 @@ using System.Text;
 namespace Indigo.Configuration
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
-    public class ModuleAttribute : Attribute
+    public sealed class ModuleAttribute : Attribute
     {
         public readonly Type ModuleType;
 

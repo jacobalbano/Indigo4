@@ -127,7 +127,7 @@ namespace Indigo.Data
             {
                 var table = new DataTable(worksheet.Name);
 
-                Cell[] maxRow = new Cell[0];
+                Cell[] maxRow = Array.Empty<Cell>();
                 var data = new List<Cell[]>();
                 foreach (var row in worksheet.Rows)
                 {

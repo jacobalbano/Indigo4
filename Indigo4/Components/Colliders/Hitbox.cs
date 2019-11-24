@@ -108,7 +108,7 @@ namespace Indigo.Components.Colliders
             OriginY = Height / 2f;
         }
 
-  //      public override void RenderDebug(Renderer.IRenderContext renderer)
+  //      public override void RenderDebug(Renderer.IRenderContext ctx)
 		//{
   //          throw new NotImplementedException();
 		//	//console.Lines.Rect(Left, Top, (int) Width, (int) Height, Color.Orange);

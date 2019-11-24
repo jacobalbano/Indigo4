@@ -47,6 +47,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entities\TestEntity1.cs" />
+    <Compile Include="Entities\TestEntity2.cs" />
+    <Compile Include="Entities\TestEntity3.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestSpace.cs" />
@@ -55,6 +57,14 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Alexandria\Alexandria\Alexandria.csproj">
+      <Project>{3FBAC59B-837D-46E8-9C27-0B76E7B26AF9}</Project>
+      <Name>Alexandria</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FNT\FNT.csproj">
+      <Project>{52F4FEF4-94F5-4F5A-BC14-4A934C7A3E49}</Project>
+      <Name>FNT</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Indigo4\Indigo4.csproj">
       <Project>{DBFC3D59-44A3-4A65-9AF5-F8EC3E1FE92A}</Project>
       <Name>Indigo4</Name>

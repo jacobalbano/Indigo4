@@ -7,13 +7,13 @@ using System.Text.RegularExpressions;
 
 namespace Indigo.Configuration
 {
-    public abstract class ConfigBase<T> : IConfig<T> where T : IConfigurableObject
+    public abstract class ConfigBase<T>
     {
         public readonly string ConfiguredObjectId;
 
         public ConfigBase()
         {
-            var attr = GetType().GetCustomAttribute<ModuleAttribute>(false);
+            var attr = GetType().GetCustomAttribute<ModuleAttribute>(true);
             if (attr == null)
                 throw new Exception($"Config class '{GetType().Name}' must have a [Module] attribute!");
             
@@ -30,6 +30,11 @@ namespace Indigo.Configuration
             });
 
             ConfiguredObjectId = $"{module.Name}.{typeof(T).Name}";
+        }
+
+        public virtual T InstantiateObject()
+        {
+            throw new NotSupportedException($"Type '{typeof(T).Name}' cannot be instantiated in this way");
         }
 
         public virtual void Validate()

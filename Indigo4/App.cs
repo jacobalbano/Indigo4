@@ -1,7 +1,8 @@
 ﻿using Alexandria;
 using Glide;
 using Indigo.Configuration;
-using Indigo.Configuration.Modules;
+using Indigo.Configuration.Modules.Alexandria;
+using Indigo.Configuration.Modules.Default;
 using Indigo.Engine;
 using Indigo.Engine.Implementation;
 using System;
@@ -10,7 +11,7 @@ using System.Text;
 
 namespace Indigo
 {
-    public class App : IConfigurableObject
+    public class App
     {
         public static Space NextSpace { get; set; }
         public static Space CurrentSpace { get; private set; }
@@ -26,12 +27,13 @@ namespace Indigo
         [Module(typeof(DefaultModule))]
         public class Config : ConfigBase<App>
         {
+            public AlexandriaConfig LibraryConfig { get; }
             public Renderer.Config RendererConfig { get; set; }
-
             public Window.Config WindowConfig { get; set; }
 
             public Config()
             {
+                LibraryConfig = new AlexandriaConfig();
                 RendererConfig = new Renderer.Config();
                 WindowConfig = new Window.Config();
             }
@@ -50,6 +52,11 @@ namespace Indigo
         {
             this.config = config ?? throw new ArgumentNullException(nameof(config));
             config.Validate();
+        }
+
+        public App(Config config, Space firstSpace) : this(config)
+        {
+            NextSpace = firstSpace;
         }
 
         public virtual void Begin()
@@ -78,7 +85,8 @@ namespace Indigo
 
         public virtual void Render()
         {
-
+            if (CurrentSpace != null)
+                Renderer.RenderSpace(CurrentSpace);
         }
 
         public virtual void End()
