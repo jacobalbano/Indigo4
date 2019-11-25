@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Indigo.Input;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,12 +13,8 @@ namespace Indigo.Inputs
         internal Keyboard()
         {
             keylist = new List<XNA.Keys>();
-            allKeys = new List<Key>();
-            keys = new Dictionary<XNA.Keys, Key>();
-
-            _any = new AnyKey();
-            Last = None = new Key();
-            allKeys.Add(Any);
+            allKeys = new List<Button>();
+            keys = new Dictionary<XNA.Keys, Button>();
 
             A = AddKey(XNA.Keys.A);
             B = AddKey(XNA.Keys.B);
@@ -130,28 +127,13 @@ namespace Indigo.Inputs
             Pause = AddKey(XNA.Keys.Pause);
             Escape = AddKey(XNA.Keys.Escape);
 
-            Control = new InputList.Any(LControl, RControl);
-            Shift = new InputList.Any(LShift, RShift);
-            Alt = new InputList.Any(RAlt, LAlt);
+            _any = new AnyButton(allKeys.ToArray()); // copy so we don't loop Any back in
+            Last = None = new Button();
+            allKeys.Add(Any);
 
-            var keyFields = typeof(Keyboard).GetFields()
-                .Where(field => typeof(Key) == field.FieldType);
-
-            foreach (var field in keyFields)
-            {
-                var key = (IInputInternals)field.GetValue(this);
-
-                if (key == null)
-                    continue;
-
-                key.SetName(field.Name);
-            }
-        }
-
-        public IEnumerable<Key> Keys()
-        {
-            for (int i = 0; i < allKeys.Count; i++)
-                if (allKeys[i] != Any) yield return allKeys[i];
+            Control = new AnyButton(LControl, RControl);
+            Shift = new AnyButton(LShift, RShift);
+            Alt = new AnyButton(RAlt, LAlt);
         }
 
         public void Update(bool hasFocus)
@@ -169,7 +151,7 @@ namespace Indigo.Inputs
                 {
                     if (!hasFocus) continue;
                     if (key.Up) internals.SetState(Button.InputState.Pressed);
-                    _any.OnPress(Last = key as Key);
+                    _any.OnPress(Last = key as Button);
                 }
                 else
                 {
@@ -178,9 +160,10 @@ namespace Indigo.Inputs
             }
         }
 
-        private Key AddKey(XNA.Keys key)
+        private Button AddKey(XNA.Keys key)
         {
-            var k = new Key();
+            var driver = new KeyboardDriver(key);
+            var k = new Button(driver);
 
             keys[key] = k;
             keylist.Add(key);
@@ -189,92 +172,52 @@ namespace Indigo.Inputs
             return k;
         }
         
-        public Key Parse(string name)
-        {
-            name = name.Trim();
-            if (name.StartsWith(ParsePrefix))
-                name = name.Substring(ParsePrefix.Length);
-
-            return allKeys.FirstOrDefault(key => key.Name == name) ?? None;
-        }
-        
-        public class Key : Button
-        {
-            internal Key() { }
-            public override string ToString()
-            {
-                return string.Format("{0}{1}", ParsePrefix, Name);
-            }
-        }
-
-        private class AnyKey : Key
-        {
-            public AnyKey()
-            {
-                Name = "Any";
-            }
-
-            private Key Actual;
-
-            public override bool Pressed => Actual?.Pressed ?? false;
-            public override bool Down => Actual?.Down ?? false;
-            public override bool Released => Actual?.Released ?? false;
-
-            public void Update()
-            {
-                if (Actual != null)
-                {
-                    if (Actual.Up)
-                        Actual = null;
-                }
-            }
-
-            public void OnPress(Key input)
-            {
-                if (Actual == null)
-                    Actual = input;
-            }
-        }
-
         #region Keys
 
         /// <summary>
         /// The "Any" key is set when any key on the keyboard is pressed, but only if its state is set to Up.
         /// Once the Any key is pressed, it will not be set again until its state is set to Up again.
         /// </summary>
-        public Key Any => _any;
-        public Key None { get; private set; }
-        public Key Last { get; private set; }
+        public Button Any => _any;
+        public Button None { get; private set; }
+        public Button Last { get; private set; }
 
         /// <summary>Alphabet keys.</summary>
-        public readonly Key A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z;
+        public readonly Button A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z;
 
         /// <summary>Number keys.</summary>
-        public readonly Key Num0, Num1, Num2, Num3, Num4, Num5, Num6, Num7, Num8, Num9;
+        public readonly Button Num0, Num1, Num2, Num3, Num4, Num5, Num6, Num7, Num8, Num9;
 
         ///	<summary>Number pad keys.</summary>
-        public readonly Key Keypad0, Keypad1, Keypad2, Keypad3, Keypad4, Keypad5, Keypad6, Keypad7, Keypad8, Keypad9;
+        public readonly Button Keypad0, Keypad1, Keypad2, Keypad3, Keypad4, Keypad5, Keypad6, Keypad7, Keypad8, Keypad9;
 
         ///	<summary>Modifier keys.</summary>
-        public readonly Key LControl, LShift, LAlt, LSystem, RControl, RShift, RAlt, RSystem;
+        public readonly Button LControl, LShift, LAlt, LSystem, RControl, RShift, RAlt, RSystem;
 
-        public readonly InputList.Any Control, Shift, Alt;
+        public readonly AnyButton Control, Shift, Alt;
 
-        public readonly Key Menu, LBracket, RBracket, SemiColon, Comma, Period, Quote, Question, Pipe, Tilde, Equal, Dash,
+        public readonly Button Menu, LBracket, RBracket, SemiColon, Comma, Period, Quote, Question, Pipe, Tilde, Equal, Dash,
             Space, Return, BackSpace, Tab, PageUp, PageDown, End, Home, Insert, Delete, KeypadPlus, KeypadMinus, KeypadMultiply, KeypadDivide, Pause, Escape;
 
         ///	<summary>Arrow keys.</summary>
-        public readonly Key Left, Right, Up, Down;
+        public readonly Button Left, Right, Up, Down;
 
         ///	<summary>Function keys.</summary>
-        public Key F1, F2, F3, F4, F5, F6, F7, F8, F9, F10, F11, F12, F13, F14, F15;
+        public Button F1, F2, F3, F4, F5, F6, F7, F8, F9, F10, F11, F12, F13, F14, F15;
 
         #endregion
 
-        private const string ParsePrefix = "Keyboard.";
         private List<XNA.Keys> keylist;
-        private List<Key> allKeys;
-        private Dictionary<XNA.Keys, Key> keys;
-        private AnyKey _any;
+        private List<Button> allKeys;
+        private Dictionary<XNA.Keys, Button> keys;
+        private AnyButton _any;
+
+
+        private class KeyboardDriver : Button.IDriver
+        {
+            public KeyboardDriver(XNA.Keys key)
+            {
+            }
+        }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using Alexandria;
 using Glide;
+using Indigo.Core.Logging;
+using Indigo.Inputs;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -13,6 +15,10 @@ namespace Indigo.Engine.Implementation
         public Renderer Renderer { get; internal set; }
         public Tweener Tweener { get; internal set; }
         public GameTime GameTime { get; internal set; }
+        public Logger Logger { get; internal set; }
+
+        public Mouse Mouse { get; internal set; }
+        //public Keyboard Keyboard { get; internal set; }
 
         #region IDisposable Support
         private bool disposedValue = false; // To detect redundant calls

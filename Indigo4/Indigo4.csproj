@@ -6,12 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Input\**" />
-    <EmbeddedResource Remove="Input\**" />
-    <None Remove="Input\**" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <Compile Remove="Input\InputDevice\Keyboard.cs" />
     <Compile Remove="Utility\AutoTileSet.cs" />
     <Compile Remove="Utility\BitwiseTileset.cs" />
     <Compile Remove="Utility\OgmoLoader.cs" />

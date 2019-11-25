@@ -1,14 +1,9 @@
-﻿using Alexandria.FileStores;
-using Indigo;
+﻿using Indigo;
 using Indigo.Configuration.Modules.Alexandria;
 using Indigo.Core;
-using Indigo.Core.Collections;
+using Indigo.Core.Logging.Endpoints;
 using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace IndigoMain
 {
@@ -20,14 +15,19 @@ namespace IndigoMain
             {
                 LibraryConfig = { FileStores = { new RootDirectoryFileStoreConfig { RootDirectoryPath = "../../Assets" } } },
                 RendererConfig = { ClearColor = Color.Indigo },
-                WindowConfig =
-                {
+
+                LoggerConfig = {
+                    IncludeCallingMethod = true,
+                    Endpoints = { new ConsoleEndpoint.Config() }
+                },
+
+                WindowConfig = {
                     WindowSize = new Size { Width = 640, Height = 480 }
                 }
             };
 
-            var app = new App(config, new TestSpace());
-            app.Run();
+            var app = new App(config);
+            app.Run(firstSpace: new TestSpace());
         }
     }
 }

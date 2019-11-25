@@ -18,11 +18,10 @@ namespace IndigoMain
         public override void Begin()
         {
             base.Begin();
-
-            var rng = new SeededRandom();
+            
+            //var rng = new SeededRandom();
             //for (int i = 0; i < 1_000; i++)
             //    Entities.Add(new TestEntity1() { X = rng.Float(App.Window.Size.Width), Y = rng.Float(App.Window.Size.Height) });
-
 
             //Entities.Add(new TestEntity2());
             Entities.Add(new TestEntity3());

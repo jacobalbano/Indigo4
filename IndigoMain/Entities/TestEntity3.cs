@@ -33,5 +33,23 @@ namespace IndigoMain.Entities
             //Components.Add(new Actor(() => parent.Angle++));
             //Components.Add(new Actor(() => child.Angle++));
         }
+
+        public override void Update()
+        {
+            base.Update();
+
+            var buttons = new[]
+            {
+                new { Name = "Left", Button = App.Mouse.Left },
+                new { Name = "Right", Button = App.Mouse.Right },
+                new { Name = "Any", Button = App.Mouse.Any },
+            };
+
+            foreach (var pair in buttons)
+            {
+                if (pair.Button.Pressed) App.Log.WriteLine($"{pair.Name} pressed");
+                if (pair.Button.Released) App.Log.WriteLine($"{pair.Name} released");
+            }
+        }
     }
 }

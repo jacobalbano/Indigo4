@@ -4,7 +4,9 @@ using System.Text;
 
 namespace Indigo.Input
 {
-    class Joystick
+    public interface IWheel
     {
+        bool Moved { get; }
+        float Delta { get; }
     }
 }

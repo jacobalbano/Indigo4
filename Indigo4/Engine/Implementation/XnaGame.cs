@@ -7,6 +7,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Diagnostics;
+using Indigo.Core.Logging;
+using Indigo.Inputs;
 
 namespace Indigo.Engine.Implementation
 {
@@ -45,8 +47,8 @@ namespace Indigo.Engine.Implementation
             var size = AppConfig.RendererConfig.InternalResolution ?? AppConfig.WindowConfig.WindowSize;
             Renderer.Target = new RenderTarget2D(GraphicsDevice, (int) size.Width, (int) size.Height);
 
-            App.Library.AddLoader(new TextureLoader(GraphicsDevice));
-            App.Library.AddLoader(new FontLoader(GraphicsDevice));
+            subSystems.Library.AddLoader(new TextureLoader(GraphicsDevice));
+            subSystems.Library.AddLoader(new FontLoader(GraphicsDevice));
         }
 
         protected override void LoadContent()
@@ -55,28 +57,33 @@ namespace Indigo.Engine.Implementation
             spriteBatch = new SpriteBatch(GraphicsDevice);
         }
 
-        internal void InitializeSubsystems(SubSystems ss)
+        internal SubSystems InitializeSubsystems()
         {
-            ss.Window = new Window(AppConfig, this);
-            ss.Library = AppConfig.LibraryConfig.InstantiateObject();
-            ss.Renderer = Renderer;
-            ss.GameTime = new GameTime();
+            return subSystems = new SubSystems
+            {
+                Window = new Window(AppConfig, this),
+                Library = AppConfig.LibraryConfig.InstantiateObject(),
+                Logger = AppConfig.LoggerConfig.InstantiateObject(),
+                Renderer = Renderer,
+                GameTime = new GameTime(),
+
+                Mouse = new Mouse()
+            };
         }
 
         protected override void Update(XNA.GameTime gameTime)
         {
             base.Update(gameTime);
-            var sw = Stopwatch.StartNew();
+            subSystems.Mouse.Update(IsActive);
+            //subSystems.Keyboard.Update(IsActive);
+
             App.Update();
-            Console.Write("Update: {0}ms   ", sw.ElapsedMilliseconds);
         }
 
         protected override void Draw(XNA.GameTime gameTime)
         {
             base.Draw(gameTime);
-            var sw = Stopwatch.StartNew();
-
-            App.GameTime.TotalTime = (float) gameTime.TotalGameTime.TotalSeconds;
+            subSystems.GameTime.TotalTime = (float) gameTime.TotalGameTime.TotalSeconds;
 
             var target = Renderer.Target;
 
@@ -104,8 +111,6 @@ namespace Indigo.Engine.Implementation
                 spriteBatch.Draw(target, new Vector2(0, 0), Color.White);
                 spriteBatch.End();
             }
-
-            Console.WriteLine("Render: {0}ms", sw.ElapsedMilliseconds);
         }
 
         protected override void BeginRun()
@@ -121,6 +126,7 @@ namespace Indigo.Engine.Implementation
         #endregion
 
         private SpriteBatch spriteBatch;
+        private SubSystems subSystems;
         private static Matrix GetVirtualRes(float targetWidth, float targetHeight, float currentWidth, float currentHeight)
         {
             float windowRatio = currentWidth / currentHeight;

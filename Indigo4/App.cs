@@ -3,8 +3,10 @@ using Glide;
 using Indigo.Configuration;
 using Indigo.Configuration.Modules.Alexandria;
 using Indigo.Configuration.Modules.Default;
+using Indigo.Core.Logging;
 using Indigo.Engine;
 using Indigo.Engine.Implementation;
+using Indigo.Inputs;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -16,6 +18,7 @@ namespace Indigo
         public static Space NextSpace { get; set; }
         public static Space CurrentSpace { get; private set; }
 
+        public static Logger Log => SS.Logger;
         public static Window Window => SS.Window;
         public static Renderer Renderer => SS.Renderer;
         public static GameTime GameTime => SS.GameTime;
@@ -24,15 +27,19 @@ namespace Indigo
 
         public static Tweener Tweener => SS.Tweener;
 
+        public static Mouse Mouse => SS.Mouse;
+
         [Module(typeof(DefaultModule))]
         public class Config : ConfigBase<App>
         {
-            public AlexandriaConfig LibraryConfig { get; }
+            public Logger.Config LoggerConfig { get; set; }
+            public AlexandriaConfig LibraryConfig { get; set; }
             public Renderer.Config RendererConfig { get; set; }
             public Window.Config WindowConfig { get; set; }
 
             public Config()
             {
+                LoggerConfig = new Logger.Config();
                 LibraryConfig = new AlexandriaConfig();
                 RendererConfig = new Renderer.Config();
                 WindowConfig = new Window.Config();
@@ -54,21 +61,12 @@ namespace Indigo
             config.Validate();
         }
 
-        public App(Config config, Space firstSpace) : this(config)
-        {
-            NextSpace = firstSpace;
-        }
-
         public virtual void Begin()
         {
         }
 
         public virtual void Update()
         {
-            //App.Mixer.Update(gameTime);
-            //App.Keyboard.Update(IsActive);
-            //App.Mouse.Update(IsActive);
-
             if (NextSpace != null)
             {
                 var next = NextSpace;
@@ -93,14 +91,14 @@ namespace Indigo
         {
         }
 
-        public void Run()
+        public void Run(Space firstSpace)
         {
             if (SS != null) throw new Exception("Only one App can run at a time");
 
-            using (SS = new SubSystems())
             using (var game = new XnaGame(this, config))
+            using (SS = game.InitializeSubsystems())
             {
-                game.InitializeSubsystems(SS);
+                NextSpace = firstSpace;
                 game.Run();
             }
 

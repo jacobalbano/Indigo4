@@ -4,7 +4,12 @@ using System.Text;
 
 namespace Indigo.Input
 {
-    class Cursor
+    public class Cursor
     {
+        public float X { get; private set; }
+        public float Y { get; private set; }
+
+        public float DeltaX { get; private set; }
+        public float DeltaY { get; private set; }
     }
 }
